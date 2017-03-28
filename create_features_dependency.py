@@ -1,6 +1,6 @@
 """
 Created Oct 2016
-@author Michael Regan
+@author M Regan
 """
 
 import csv
@@ -14,11 +14,11 @@ from collections import defaultdict
 
 """Creates the feature vector from a dependency parse for clustering experiments using verb and preposition supersenses (Amalgram)"""
 
-path='/Users/Michael/Documents/UNM_Courses/CS521_DataMining/Supersenses/streusle-3.0/streusle.tags.sst'
+path='path/to/streusle.tags.sst'
 
-dependency_path='/Users/Michael/Documents/UNM_Courses/CS521_DataMining/Supersenses/dependency_data/streusle_dependency.txt.nlp'
+dependency_path='path/to/streusle_dependency.txt.nlp'
 
-ID_path='/Users/Michael/Documents/UNM_Courses/CS521_DataMining/Supersenses/dependency_data/streusle_IDs.txt'
+ID_path='path/to/streusle_IDs.txt'
 
 streusle_dict={}
 

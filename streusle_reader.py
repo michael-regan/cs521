@@ -1,6 +1,8 @@
 """
 Created Sept 2016
-@author Michael Regan
+@author M Regan
+Reading Streusle verb supersense data; clustering using sklearn; compare results of algorithms; visualize
+Chaotic implementation
 """
 
 import csv
@@ -33,9 +35,9 @@ from matplotlib.backends.backend_pdf import PdfPages
 # Clustering to see what comes up (kmeans); which semantic spaces could be linked to force dynamic patterns
 # Lots of preprocessing necessary (dependency parses are messy)
 
-path='/Users/Michael/Documents/UNM_Courses/CS521_DataMining/Supersenses/streusle-3.0/streusle.tags.sst'
+path='/path/to/streusle.tags.sst'
 
-dependency_path='/Users/Michael/Documents/UNM_Courses/CS521_DataMining/Supersenses/dependency_data/streusle_dependency.txt.nlp'
+dependency_path='/path/to/streusle_dependency.txt.nlp'
 
 
 streusle_dict={}
@@ -212,15 +214,15 @@ def deprecated_output_sentences_for_dependency_parsing():
 """
 using NLP4J
 command line: 
-bin/nlpdecode -c config-decode-en.xml -i /Users/michael/Desktop/streusle_dependency.txt 
+bin/nlpdecode -c config-decode-en.xml -i /path/to/streusle_dependency.txt 
 """
      
      
      
 def cleaner_output_sentences_for_dependency_features():
     
-    _path='/Users/Michael/Desktop/streusle_dependency.txt'
-    #file_path='/Users/Michael/Desktop/streusle_IDs.txt'
+    _path='/path/to/streusle_dependency.txt'
+    #file_path='/path/to/streusle_IDs.txt'
 
     with open(_path, 'w') as f:#, open(file_path, 'w') as g:
         for k, v in streusle_dict.items():
@@ -503,7 +505,7 @@ def kmeans_dependency_features():
     np.random.seed(42)
     
     data = scale(X)
-    #not scaling the data gives slightly (only slightly) better results
+    #not scaling the data gives only slightly better results
     data=X
     
     n_samples, n_features = data.shape
@@ -683,7 +685,7 @@ def create_word_vector_features():
     # print()
     # print("Ready to read in Glove vector values")
     # pause=input("Enter to continue")
-    glove_path='/Users/Michael/Documents/corpora/glove/glove.6B.300d.txt'        
+    glove_path='/path/to/glove.6B.300d.txt'        
       
     glove_dict={}
 
@@ -711,7 +713,7 @@ def create_word_vector_features():
                 dictionary_vectors_averaged[k]=sum_of_vectors_averaged
      
     print()        
-    #print(len(dictionary_vectors_averaged))  #2549 (with vectors composed of at least two elements)
+    #print(len(dictionary_vectors_averaged)) (with vectors composed of at least two elements)
     print()
     
     
@@ -1450,7 +1452,7 @@ def determine_vsst_psst_collocations():
         
     print('\n')
     print('\n')
-    print('Combined length of all items in the two collocation dictionaries ', cnt) #13550, which is a bit more than combined totals of vssts and pssts
+    print('Combined length of all items in the two collocation dictionaries ', cnt)  # a bit more than combined totals of vssts and pssts
     print('\n')
     print('\n')
     

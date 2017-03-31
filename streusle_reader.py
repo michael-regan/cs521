@@ -987,86 +987,6 @@ def multiple_clustering():
     
     
     
-def ward_clustering():
-    
-    from sklearn.cluster import AgglomerativeClustering
-    #from sklearn.neighbors import kneighbors_graph
-    from sklearn.preprocessing import StandardScaler
-    import mpl_toolkits.mplot3d.axes3d as p3
-    
-    #one-hot, dependency based
-    list_all_one_hot=[]
-    labels=[]
-    for k, v in one_hot_all_dict.items():
-        labels.append(k[2])
-        list_all_one_hot.append(v)
-        
-    onehot=(np.array(list_all_one_hot), np.array(labels))
-    
-    #concatenated word vectors
-    conc_training_features=[] 
-    conc_training_labels=[]
-    for k, v in dictionary_vectors_concatenated.items():
-        conc_training_labels.append(k[2])
-        conc_training_features.append(v)
-    
-    concatenated=(np.array(conc_training_features), np.array(conc_training_labels))
-        
-    #summed and averaged word vectors
-    
-    summed_training_features=[] 
-    summed_training_labels=[]
-    for k, v in dictionary_vectors_averaged.items():
-        summed_training_labels.append(k[2])
-        summed_training_features.append(v)
-
-    summed=(np.array(summed_training_features), np.array(summed_training_labels))
-
-    
-    clustering_names = ['Ward']#['Ward', 'AgglomerativeClustering', 'DBSCAN']
-
-    datasets = [onehot, concatenated, summed]
-    for i_dataset, dataset in enumerate(datasets):
-        X, _ = dataset
-        
-        if dataset==onehot:
-            thisLabel='basic dependencies'
-        elif dataset==concatenated:
-            thisLabel='concatenated word vectors'
-        else:
-            thisLabel='summed and averaged word vectors'
-        
-            
-        # normalize dataset for easier parameter selection
-        X = StandardScaler().fit_transform(X)
-
-        # estimate bandwidth for mean shift
-        #bandwidth = cluster.estimate_bandwidth(X, quantile=0.3)
-
-        # connectivity matrix for structured Ward
-        #connectivity = kneighbors_graph(X, n_neighbors=10, include_self=False)
-        # make connectivity symmetric
-        #connectivity = 0.5 * (connectivity + connectivity.T)
-
-        # create clustering estimators
-        print("Compute unstructured hierarchical clustering...")
-        st = time.time()
-        ward = AgglomerativeClustering(n_clusters=13, linkage='ward').fit(X)
-        elapsed_time = time.time() - st
-        label = ward.labels_
-        print("Elapsed time: %.2fs" % elapsed_time)
-        print("Number of points: %i" % label.size)
-        
-        fig = plt.figure()
-        ax = p3.Axes3D(fig)
-        ax.view_init(7, -80)
-        for l in np.unique(label):
-            ax.plot3D(X[label == l, 0], X[label == l, 1], X[label == l, 2],
-                      'o', color=plt.cm.jet(np.float(l) / np.max(label + 1)))
-        plt.title('Ward clustering of ' + thisLabel + '\n Without connectivity constraints (time %.2fs)' % elapsed_time)
-        plt.show()
-      
-
 def ward_clustering_take_two():
     
     from sklearn import manifold
@@ -1569,7 +1489,7 @@ def contingency_table_vsst_psst_window_of_4():
 
     print(round(df/totalTable, 3).to_latex())    #probabilities of all values in table
     
-    csv_path='/Users/Michael/Desktop/psst_freq.csv'
+    csv_path='/path/to/psst_freq.csv'
     
     # df.to_csv(csv_path, sep='\t')
     

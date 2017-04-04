@@ -18,15 +18,14 @@ import time
 
 
 # load dataset
-glove_path='/Users/Michael/Desktop/Supersenses/data/lemmas_glove.csv'
+glove_path='/path/to/lemmas_glove.csv'
 
-glove_no_punct_path='/Users/Michael/Desktop/Supersenses/data/lemmas_glove_no_punct.csv'
+glove_no_punct_path='/path/to/lemmas_glove_no_punct.csv'
 
-glove_psst_path='/Users/Michael/Desktop/Supersenses/data/lemmas_glove_psst.csv'
+glove_psst_path='/path/to/lemmas_glove_psst.csv'
 
-psst_nsst_path='/Users/Michael/Desktop/Supersenses/data/pssts+nssts_glove.csv'
+psst_nsst_path='/path/to/pssts+nssts_glove.csv'
 
-# fix random seed for reproducibility
 seed = 7
 np.random.seed(seed)
 
@@ -49,7 +48,7 @@ for iter in range(1):
         for hidden_layers in [500]:
             
             tic = time.clock()
-    
+                
             A = X[:i]
             B = Y[:i]
 
@@ -59,7 +58,7 @@ for iter in range(1):
             encoder = LabelEncoder()
             encoder.fit(B)
             encoded_Y = encoder.transform(B)
-            # convert integers to dummy variables (i.e. one hot encoded)
+            # convert integers to one hot encoded
             dummy_y = np_utils.to_categorical(encoded_Y)
 
 

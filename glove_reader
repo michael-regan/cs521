@@ -1,0 +1,148 @@
+# Input: dictionary with values as lists of tokens (don't need to be lower case)
+# Output: Two pickled dictionaries (one summed & avgd vectors; the second, concatenated); keys are vssts, values are lists of numpy arrays
+
+# revised from the CS521 Outliers project, Dec 2016
+
+# label = Training or Test
+
+def glove_reader(myDict, label):
+    
+    import pickle
+    import numpy as np
+    import time
+    
+    glove_path='/path/to/glove.6B.300d.txt'        
+  
+    glove_dict={}
+
+    tic = time.clock()
+    print("Loading GloVe dictionary...")
+    print()
+    
+    with open(glove_path) as f:
+        for line in f:
+            array=line.split()
+            word=array[0]
+            vector=array[1:]
+            glove_dict[word]=vector
+            
+    print("Transforming data into vectors: EXP1 (300-d, summed and averaged)...")
+    print()
+    
+    dictionary_vectors_averaged={}
+        
+    for k, v in myDict.items():
+        
+        vsst=k
+        
+        for thisExample in v:
+            
+            raw_vector_list=[]
+            
+            for token in thisExample:   # reading in one token at a time
+            
+                if token not in glove_dict:
+                    pass
+                    
+                else:
+                    token=token.lower()
+                    vector=glove_dict[token]
+                    raw_vector_list.append(vector)
+                
+            if len(raw_vector_list)>0:
+                
+                sum_of_vectors_averaged=sum(np.asarray(raw_vector_list, dtype=float)) / float(len(raw_vector_list))
+                
+                if vsst not in dictionary_vectors_averaged:
+                    dictionary_vectors_averaged[vsst]=[]
+                else:
+                    dictionary_vectors_averaged[vsst].append(sum_of_vectors_averaged)
+       
+       
+    data = dictionary_vectors_averaged  
+    
+    print("Numbers for averaged vectors")
+    print()
+    for k, v in data.items():
+        print(k, len(v))
+    print()    
+
+    
+    path= './glove_AVG_'+label+'.pickle' 
+    
+    print("Output to path:", path)  
+    print()
+                
+    with open(path, 'wb') as f:
+        # Pickle the 'data' dictionary using the highest protocol available.
+        pickle.dump(data, f, pickle.HIGHEST_PROTOCOL)
+        
+    print("Done")
+    toc = time.clock()
+    print("total time needed for word vectorization:", toc - tic)
+    
+    
+    ###*****************************************************###
+    tic = time.clock()
+    print("Transforming data into vectors: EXP2 (2100-d, concatenated)...")
+    print()
+    
+    concatenatedDict={}
+        
+    for k, v in myDict.items():
+        
+        vsst=k
+        
+        for thisExample in v:   # reading in one list of tokens (=Example) at a time
+        
+            raw_vector_list=[]
+            
+            for token in thisExample:
+                
+                if token not in glove_dict:
+                    pass
+                    
+                else:
+                    token=token.lower()
+                    vector=glove_dict[token]
+                    raw_vector_list.extend(vector)
+                    
+            if len(raw_vector_list)>0:
+                
+                x=np.asarray(raw_vector_list, dtype=float)
+                
+                concatenatedVec=x[:1800]
+                
+                if len(concatenatedVec)==1800:
+                    
+                    if vsst not in concatenatedDict:
+                        concatenatedDict[vsst]=[]
+                    else:
+                        concatenatedDict[vsst].append(concatenatedVec)
+       
+       
+    data = concatenatedDict 
+    
+    print("Numbers for concatenated vectors")
+    print()
+    for k, v in data.items():
+        print(k, len(v))
+    print() 
+    
+    path= './glove_CONC_'+label+'.pickle' 
+    
+    print("Output to path:", path)  
+    print()
+                
+    with open(path, 'wb') as f:
+        # Pickle the 'data' dictionary using the highest protocol available.
+        pickle.dump(data, f, pickle.HIGHEST_PROTOCOL)
+        
+    print("Done")
+    toc = time.clock()
+    print("total time needed for word vectorization:", toc - tic)
+    
+    
+    ###*****************************************************###
+
+    

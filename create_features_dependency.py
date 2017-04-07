@@ -79,7 +79,7 @@ def read_dependency_data():
         if item!=[]:
             temp_list.append(item)
         else:
-            if len(temp_list)==1 and temp_list[0][1]=='.':  #trying to get rid of individual periods (e.g., double punctuation)
+            if len(temp_list)==1 and temp_list[0][1]=='.':  #getting rid of individual periods (e.g., double punctuation)
                 pass
             else:
                 temp_list_of_lists.append(temp_list)
